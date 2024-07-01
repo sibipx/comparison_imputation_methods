@@ -1,4 +1,4 @@
-# missForest_v2_comparison
+# missForestPredict comparison
 
 ## How to run and get results for a new dataset 
 
