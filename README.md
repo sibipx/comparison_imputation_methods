@@ -2,7 +2,7 @@
 
 ## How to run and get results for a new dataset 
 
-You can add datasets and visualize results in a similar manner as in the accompanying study.
+You can add datasets and visualize results in a similar manner as in the [accompanying study](https://arxiv.org/abs/2407.03379).
 
 1. Clone or download the project's repository and setup the R project on your machine.
 
