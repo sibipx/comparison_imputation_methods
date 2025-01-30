@@ -11,6 +11,8 @@
 #' @param positive_class in case of binary outcome (classification) the name of the positive class
 #' @param predictor_matrix predictor matrix
 #' @param sim_MV_func function to simulate missing values; if NULL, MCAR will be simulated
+#' @param save_dataset save the train and test imputed datasets
+#' @param run_pred_model run prediction model (or only run imputation)
 #'
 #' @return results
 
@@ -18,7 +20,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                             simulate_MV,
                             positive_class = NULL,
                             predictor_matrix = NULL,
-                            sim_MV_func = NULL){
+                            sim_MV_func = NULL,
+                            save_dataset = FALSE,
+                            run_pred_model = TRUE){
 
   data <- as.data.frame(data)
 
@@ -101,6 +105,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
 
     data_train_X <- data_train[,!colnames(data_train) %in% outcome_col]
     data_test_X <- data_test[,!colnames(data_test) %in% outcome_col]
+
+    # save original data for datasets with missing values
+    # save(data_test_X, file = sprintf("data_imp/test_%s_orig_%s.RData", dataset_name, i))
 
     # produce NAs
     if (simulate_MV){
@@ -214,7 +221,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                          data_train_X = data_train_X,
                                          data_test_X = data_test_X,
                                          return_var_imp = FALSE,
-                                         positive_class = positive_class)
+                                         positive_class = positive_class,
+                                         save_dataset = save_dataset,
+                                         run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_mean_mode)
     }
@@ -241,7 +250,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                data_train_X = data_train_X, data_test_X = data_test_X,
                                return_var_imp = FALSE,
                                dataset_name = dataset_name,
-                               positive_class = positive_class)
+                               positive_class = positive_class,
+                               save_dataset = save_dataset,
+                               run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_knn)
       } else {
@@ -256,7 +267,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                data_train_X = data_train_X, data_test_X = data_test_X,
                                return_var_imp = FALSE,
                                dataset_name = dataset_name,
-                               positive_class = positive_class)
+                               positive_class = positive_class,
+                               save_dataset = save_dataset,
+                               run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_knn)
       }
@@ -288,7 +301,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                        mapping_tables_train_miss = NULL,
                                        data_train_X = data_train_X, data_test_X = data_test_X,
                                        return_var_imp = FALSE,
-                                       positive_class = positive_class)
+                                       positive_class = positive_class,
+                                       save_dataset = save_dataset,
+                                       run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_bagging)
       } else {
@@ -303,7 +318,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                        mapping_tables_train_miss = NULL,
                                        data_train_X = data_train_X, data_test_X = data_test_X,
                                        return_var_imp = FALSE,
-                                       positive_class = positive_class)
+                                       positive_class = positive_class,
+                                       save_dataset = save_dataset,
+                                       run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_bagging)
       }
@@ -358,7 +375,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                data_train_X = data_train_X, data_test_X = data_test_X,
                                                return_var_imp = FALSE,
                                                positive_class = positive_class,
-                                               vars_to_impute = vars_to_impute) # use vars_to_impute as in miceRanger
+                                               vars_to_impute = vars_to_impute,
+                                               save_dataset = save_dataset,
+                                               run_pred_model = run_pred_model) # use vars_to_impute as in miceRanger
 
       results <- results %>% rbind(results_tidy_bagging)
       # }
@@ -413,7 +432,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                        data_train_X = data_train_X, data_test_X = data_test_X,
                                        return_var_imp = FALSE,
                                        positive_class = positive_class,
-                                       vars_to_impute = vars_to_impute) # use vars_to_impute as in miceRanger
+                                       vars_to_impute = vars_to_impute,
+                                       save_dataset = save_dataset,
+                                       run_pred_model = run_pred_model) # use vars_to_impute as in miceRanger
 
       results <- results %>% rbind(results_tidy_knn)
       # }
@@ -450,7 +471,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                data_train_X = data_train_X, data_test_X = data_test_X,
                                                return_var_imp = FALSE,
                                                positive_class = positive_class,
-                                               vars_to_impute = vars_to_impute_bin) # use vars_to_impute as in miceRanger
+                                               vars_to_impute = vars_to_impute_bin,
+                                               save_dataset = save_dataset,
+                                               run_pred_model = run_pred_model) # use vars_to_impute as in miceRanger
 
         results <- results %>% rbind(results_tidy_linear)
       } else {
@@ -466,7 +489,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                data_train_X = data_train_X, data_test_X = data_test_X,
                                                return_var_imp = FALSE,
                                                positive_class = positive_class,
-                                               vars_to_impute = vars_to_impute) # use vars_to_impute as in miceRanger
+                                               vars_to_impute = vars_to_impute,
+                                               save_dataset = save_dataset,
+                                               run_pred_model = run_pred_model) # use vars_to_impute as in miceRanger
 
         results <- results %>% rbind(results_tidy_linear)
       }
@@ -490,7 +515,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                          mapping_tables_train_miss = NULL,
                                                          data_train_X = data_train_X, data_test_X = data_test_X,
                                                          return_var_imp = FALSE,
-                                                         positive_class = positive_class)
+                                                         positive_class = positive_class,
+                                                         save_dataset = save_dataset,
+                                                         run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_IterativeImputer)
       } else {
@@ -504,7 +531,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                          mapping_tables_train_miss = NULL,
                                                          data_train_X = data_train_X, data_test_X = data_test_X,
                                                          return_var_imp = FALSE,
-                                                         positive_class = positive_class)
+                                                         positive_class = positive_class,
+                                                         save_dataset = save_dataset,
+                                                         run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_IterativeImputer)
       }
@@ -529,7 +558,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                            data_train_X = data_train_X, data_test_X = data_test_X,
                                            return_var_imp = TRUE,
                                            predictor_matrix = predictor_matrix,
-                                           positive_class = positive_class)
+                                           positive_class = positive_class,
+                                           save_dataset = save_dataset,
+                                           run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_missForest)
     }
@@ -550,7 +581,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                                      data_train_X = data_train_X, data_test_X = data_test_X,
                                                      return_var_imp = TRUE,
                                                      predictor_matrix = predictor_matrix,
-                                                     positive_class = positive_class)
+                                                     positive_class = positive_class,
+                                                     save_dataset = save_dataset,
+                                                     run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_missForest_md10)
     }
@@ -570,7 +603,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                            data_train_X = data_train_X, data_test_X = data_test_X,
                                            return_var_imp = FALSE,
                                            m = 5, vars_to_impute = vars_to_impute,
-                                           positive_class = positive_class)
+                                           positive_class = positive_class,
+                                           save_dataset = save_dataset,
+                                           run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_miceRanger)
     }
@@ -590,7 +625,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                      data_train_X = data_train_X, data_test_X = data_test_X,
                                      return_var_imp = FALSE,
                                      m = 5, vars_to_impute = vars_to_impute,
-                                     positive_class = positive_class)
+                                     positive_class = positive_class,
+                                     save_dataset = save_dataset,
+                                     run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_mice_rf)
     }
@@ -610,7 +647,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
                                data_train_X = data_train_X, data_test_X = data_test_X,
                                return_var_imp = FALSE,
                                m = 5, vars_to_impute = vars_to_impute,
-                               positive_class = positive_class)
+                               positive_class = positive_class,
+                               save_dataset = save_dataset,
+                               run_pred_model = run_pred_model)
 
       results <- results %>% rbind(results_mice)
     }
@@ -627,7 +666,9 @@ run_simulations <- function(data, outcome_col, N_iter, dataset_name, p_miss,
         results_original <- run_original(data_train_X, data_test_X, y_train, y_test,
                                          i, j, dataset_name = dataset_name,
                                          return_var_imp = TRUE,
-                                         positive_class = positive_class)
+                                         positive_class = positive_class,
+                                         save_dataset = save_dataset,
+                                         run_pred_model = run_pred_model)
 
         results <- results %>% rbind(results_original)
       }

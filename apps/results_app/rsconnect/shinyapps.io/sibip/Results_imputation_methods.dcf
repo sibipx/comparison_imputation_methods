@@ -5,7 +5,7 @@ account: sibip
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12143567
-bundleId: 8811486
+bundleId: 9678849
 url: https://sibip.shinyapps.io/Results_imputation_methods/
 version: 1
 asMultiple: FALSE

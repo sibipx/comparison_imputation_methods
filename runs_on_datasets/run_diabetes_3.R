@@ -44,7 +44,9 @@ print(sprintf("Dataset %s", dataset_name))
 
 all_results <- run_simulations(data, outcome_col, N_iter, dataset_name, p_miss,
                                simulate_MV = simulate_MV, positive_class = positive_class,
-                               predictor_matrix = predictor_matrix)
+                               predictor_matrix = predictor_matrix,
+                               save_dataset = save_dataset,
+                               run_pred_model = run_pred_model)
 
 save(all_results, file = sprintf("results/results_3_%s.RData", dataset_name))
 

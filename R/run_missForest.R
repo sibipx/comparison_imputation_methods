@@ -18,6 +18,8 @@
 #' @param dataset_name dataset name
 #' @param predictor_matrix predictor matrix to be passed to missForest
 #' @param positive_class in case of binary outcome (classification) the name of the positive class
+#' @param dataset_name dataset name
+#' @param positive_class in case of binary outcome (classification) the name of the positive class
 #'
 #' @return results
 
@@ -31,6 +33,8 @@ run_missForest <- function(data_train_X_miss, data_test_X_miss, y_train, y_test,
                            return_var_imp = FALSE,
                            predictor_matrix = predictor_matrix,
                            positive_class = NULL,
+                           save_dataset = FALSE,
+                           run_pred_model = TRUE,
                            ...){
 
   results <- init_results()
@@ -152,13 +156,20 @@ run_missForest <- function(data_train_X_miss, data_test_X_miss, y_train, y_test,
                                  method = method,
                                  value = n_iter_missFP)
 
-  # build and evaluate all prediction models
-  results_pred_models <- run_pred_models(data_train_imp, data_test_imp,
-                                         y_train, y_test, return_var_imp, dataset_name, i, j, method,
-                                         positive_class = positive_class,
-                                         data_train_X_miss)
+  if (save_dataset){
+    save(data_train_imp, file = sprintf("data_imp/train_imp_%s_%s_%s.RData", dataset_name, method, i))
+    save(data_test_imp, file = sprintf("data_imp/test_imp_%s_%s_%s.RData", dataset_name, method, i))
+  }
 
-  results <- results %>% add_row(results_pred_models)
+  # build and evaluate all prediction models
+  if (run_pred_model){
+    results_pred_models <- run_pred_models(data_train_imp, data_test_imp,
+                                           y_train, y_test, return_var_imp, dataset_name, i, j, method,
+                                           positive_class = positive_class,
+                                           data_train_X_miss)
+
+    results <- results %>% add_row(results_pred_models)
+  }
 
   return(results)
 }

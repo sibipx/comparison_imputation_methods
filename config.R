@@ -98,3 +98,8 @@ seed <- 2024
 i_start <-  1
 j_start <- 0
 
+# parameter to save datasets for distribution comparison
+# (storage requirements can be high for the large datasets over many iterations)
+save_dataset <- FALSE
+# parameter to run prediction models (if FALSE, one can only save imputations and compare distributions)
+run_pred_model <- TRUE

@@ -30,11 +30,18 @@ max_quiet <- function(x) suppressWarnings(max(x))
 #     method == "missForestPredict" ~ "missFP",
 #     method == "missForestPredict_md10" ~ "missFP_md10",
 #     TRUE ~ method)) %>%
-#   mutate(method = factor(method, levels = c("mean/mode", "linear", "mice_default",
-#                                             "knn", "bagging",
+#   # mutate(method = factor(method, levels = c("mean/mode", "linear", "mice_default",
+#   #                                           "knn", "bagging",
+#   #                                           "python_II", "mice_rf", "miceRanger",
+#   #                                           "missFP", "missFP_md10",
+#   #                                           "original"))) %>%
+#   mutate(method = factor(method, levels = c("original",
+#                                             "bagging",
 #                                             "python_II", "mice_rf", "miceRanger",
 #                                             "missFP", "missFP_md10",
-#                                             "original"))) %>%
+#                                             "mean/mode", "linear", "mice_default",
+#                                             "knn"
+#   ))) %>%
 #   mutate(Type = case_when(method == "original" ~ "original",
 #                           method == "mean/mode" ~ "mean/mode",
 #                           method %in% c("linear", "mice_default") ~ "linear",
@@ -47,11 +54,18 @@ max_quiet <- function(x) suppressWarnings(max(x))
 #   mutate(metric = if_else(metric == "mean_calibration", "E:O ratio", metric)) %>%
 #   filter(!metric %in% c("n_all_missing_train", "n_all_missing_test", "n_train", "n_test",
 #                         "n_complete_cases_train", "n_complete_cases_test", "n_iter_converge")) %>%
-#   mutate(method = factor(method, levels = c("mean/mode", "linear", "mice_default",
-#                                             "knn", "bagging",
+#   # mutate(method = factor(method, levels = c("mean/mode", "linear", "mice_default",
+#   #                                           "knn", "bagging",
+#   #                                           "python_II", "mice_rf", "miceRanger",
+#   #                                           "missFP", "missFP_md10",
+#   #                                           "original"))) %>%
+#   mutate(method = factor(method, levels = c("original",
+#                                             "bagging",
 #                                             "python_II", "mice_rf", "miceRanger",
 #                                             "missFP", "missFP_md10",
-#                                             "original")))
+#                                             "mean/mode", "linear", "mice_default",
+#                                             "knn"
+#   )))
 #
 # # var importance
 # results_var_imp <- results_all_datasets %>%
@@ -196,11 +210,18 @@ max_quiet <- function(x) suppressWarnings(max(x))
 #   pivot_wider(names_from = c(dataset)) %>%
 #   rename(Metric = metric,
 #          Model = model) %>%
-#   mutate(Method = factor(Method, levels = c("mean/mode", "linear", "mice_default",
-#                                             "knn", "bagging",
+#   # mutate(Method = factor(Method, levels = c("mean/mode", "linear", "mice_default",
+#   #                                           "knn", "bagging",
+#   #                                           "python_II", "mice_rf", "miceRanger",
+#   #                                           "missFP", "missFP_md10",
+#   #                                           "original"))) %>%
+#   mutate(Method = factor(Method, levels = c("original",
+#                                             "bagging",
 #                                             "python_II", "mice_rf", "miceRanger",
 #                                             "missFP", "missFP_md10",
-#                                             "original"))) %>%
+#                                             "mean/mode", "linear", "mice_default",
+#                                             "knn"
+#   ))) %>%
 #   arrange(Metric, Model, Method)
 #
 # save(data_tables, file = "apps/results_app/data_tables.Rdata")
